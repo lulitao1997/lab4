@@ -1,3 +1,5 @@
+#ifndef HARDWAREUNITS_H
+#define HARDWAREUNITS_H
 //------------------------------------FETCH--------------------------------------------------------
 
 struct Align_ {
@@ -184,3 +186,4 @@ struct Datamemory_ {
 		}
 	}
 };
+#endif

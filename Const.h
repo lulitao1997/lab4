@@ -1,5 +1,6 @@
 //icode
-
+#ifndef CONST_H
+#define CONST_H
 const int INOP = 1;
 const int IHALT = 0;
 const int IRRMOVL = 2;
@@ -36,3 +37,4 @@ const int SHLT = 4; //处理器执行HLT指令
 6 esi
 7 edi
 F (RNONE)*/
+#endif
