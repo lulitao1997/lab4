@@ -5,6 +5,21 @@
 using namespace std;
 
 string ipath;
+map<int,int> a2n;
+QString to16(int x) {
+    stringstream buf;
+    buf << "0x" << std::hex << x;
+    return QString::fromStdString(buf.str());
+}
+QString toq(const string &s) {
+    return QString::fromStdString(s);
+}
+
+QColor colW = QColor(255,255,100);
+QColor colM = QColor(255,100,255);
+QColor colE = QColor(200,255,255);
+QColor colD = QColor(200,100,255);
+QColor colF = QColor(255,100,100);
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,14 +33,15 @@ MainWindow::MainWindow(QWidget *parent) :
     else {
         ;//QMessageBox::information(NULL, tr("Path"), tr("You selected ") + path);
     }
-    ipath = path.toStdString();
-    pipe_init(ipath);
+
 
     ui->setupUi(this);
     timer = new QTimer(this);
+    ipath = path.toStdString();
+
     connect(timer, SIGNAL(timeout()), this, SLOT(stepOne()));
-    ui->mem_watch->resizeColumnsToContents();
-    ui->ins_watch->resizeColumnsToContents();
+
+    pipeReset();
 }
 
 
@@ -58,14 +74,25 @@ void MainWindow::stepNext() {
 }
 
 void MainWindow::pipeReset() {
-    pipe_init(ipath);
-    showAll();
-}
+    transfer(ipath);
+    pipe_init("__ins_buf__");
+    auto tbl = read_from_yo(ipath);
+    ui->mem_watch->resizeColumnsToContents();
+    ui->mem_watch->setRowCount(1000);
+    ui->ins_watch->resizeColumnsToContents();
+    ui->ins_watch->setRowCount(tbl.first.size());
+    //for (int i=0;i<ui->ins_watch->rowCount();i++)
+    //    setcol(i,QColor(255,255,255));
 
-QString to16(int x) {
-    stringstream buf;
-    buf << "0x" << std::hex << x;
-    return QString::fromStdString(buf.str());
+    int cnt = 0;
+    for (auto i:tbl.first) {
+        ui->ins_watch->setItem(cnt,0,new QTableWidgetItem(to16(i.addr)));
+        //ui->ins_watch->setItem(cnt,1,new QTableWidgetItem(toq(i.code)));
+        ui->ins_watch->setItem(cnt,1,new QTableWidgetItem(toq(i.content)));
+        cnt++;
+    }
+    a2n = tbl.second;
+    showAll();
 }
 
 void ST(QLineEdit *w, int x) {
@@ -74,6 +101,14 @@ void ST(QLineEdit *w, int x) {
 
 void ST(QLineEdit *w, string x) {
     w->setText(QString::fromStdString(x));
+}
+
+void MainWindow::setcol(int rn, QColor col) {
+    for (int i=0;i<2;i++) {
+        QTableWidgetItem *t = new QTableWidgetItem(*ui->ins_watch->item(rn,i));
+        t->setBackgroundColor(col);
+        ui->ins_watch->setItem(rn,i,t);
+    }
 }
 
 void MainWindow::showAll() {
@@ -142,6 +177,25 @@ void MainWindow::showAll() {
 
     ST(ui->tpredPC, p.F.predPC);
     //for ()
+
+    ui->mem_watch->clear();
+    for (int i=0; i<1000; i++) {
+        ui->mem_watch->setItem(i,0,new QTableWidgetItem(to16(i)));
+        ui->mem_watch->setItem(i,1,new QTableWidgetItem(to16(p.Datamemory.Val[i])));
+    }
+    //WMEDF
+
+    for (int i=0;i<ui->ins_watch->rowCount();i++)
+        setcol(i,QColor(255,255,255));
+    if (a2n.count(p.W.begin)) setcol(a2n[p.W.begin],colW);
+    if (a2n.count(p.M.begin)) setcol(a2n[p.M.begin],colM);
+    if (a2n.count(p.E.begin)) setcol(a2n[p.E.begin],colE);
+    if (a2n.count(p.D.begin)) setcol(a2n[p.D.begin],colD);
+    if (a2n.count(p.F.begin)) setcol(a2n[p.F.predPC],colF);
+    ui->mem_watch->resizeColumnsToContents();
+    ui->mem_watch->resizeRowsToContents();
+    ui->ins_watch->resizeColumnsToContents();
+    ui->ins_watch->resizeRowsToContents();
 }
 
 void MainWindow::on_MainWindow_destroyed() {

@@ -9,6 +9,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 #include "pipe.h"
+#include "bin2ins.h"
+#include "transfer.h"
 namespace Ui {
 class MainWindow;
 }
@@ -30,7 +32,7 @@ private slots:
     void showAll();
     void pipeReset();
     void on_bReset_clicked();
-
+    void setcol(int rn, QColor col);
 private:
     Ui::MainWindow *ui;
     QTimer *timer;

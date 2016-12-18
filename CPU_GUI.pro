@@ -14,11 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    Pipe.cpp
+    Pipe.cpp \
+    Transfer.cpp \
+    bin2ins.cpp
 
 HEADERS  += mainwindow.h \
     pipe.h \
-    bin2ins.h
+    bin2ins.h \
+    transfer.h
 
 FORMS    += mainwindow.ui
 CONFIG += c++11

@@ -1,12 +1,11 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include "transfer.h"
 
 int pas;
 char ins[1010];
 
-int main() {
-	freopen("input.yo","r",stdin);
-	freopen("input.in","w",stdout);
+void transfer(const string &input){
+    freopen(input.c_str(),"r",stdin);
+    freopen("__ins_buf__","w",stdout);
 	while (true) {
 		string s = "";
 		char ch;
@@ -36,5 +35,4 @@ int main() {
 		putchar('\n');
 		pas = u + n / 2;
 	}
-	return 0;
 }

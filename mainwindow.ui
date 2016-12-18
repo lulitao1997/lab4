@@ -356,11 +356,6 @@
     </column>
     <column>
      <property name="text">
-      <string>Bin Code</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
       <string>Instruction</string>
      </property>
     </column>

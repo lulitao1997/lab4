@@ -170,7 +170,8 @@ struct cond_ {
 struct Datamemory_ {
 	int Max = 2500;
 	int dmem_error;
-	int Val[3010];
+    int Val[3010];
+    //map<int,int> Val;
 	int val;
 	int Get() { return val; }
 	void Proc(int Memread, int Memwrite, int Addr, int M_valA) {
