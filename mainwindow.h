@@ -33,6 +33,8 @@ private slots:
     void pipeReset();
     void on_bReset_clicked();
     void setcol(int rn, QColor col);
+    void on_horizontalSlider_valueChanged(int value);
+
 private:
     Ui::MainWindow *ui;
     QTimer *timer;

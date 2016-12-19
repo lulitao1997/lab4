@@ -44,10 +44,10 @@ MainWindow::MainWindow(QWidget *parent) :
     pipeReset();
 }
 
-
+int intv = 1000;
 
 void MainWindow::timerGo() {
-    timer->start(1000);
+    timer->start(intv);
 }
 
 void MainWindow::timerPause() {
@@ -212,3 +212,9 @@ void MainWindow::on_bReset_clicked()
 
 }
 
+
+void MainWindow::on_horizontalSlider_valueChanged(int value)
+{
+    ui->lspd->setText(QString::fromStdString(to_string(value)+"Hz"));
+    intv = 1000 / value;
+}
